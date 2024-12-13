@@ -83,7 +83,7 @@ Log messages to a file with dynamic filename formatting:
 
 	func main() {
 	    ctx := context.Background()
-	    fileLogger := logger.FileWriter(ctx, "{curdir}/{yyyy}/{mm}/logfile_{yyyy}{mm}{dd}.log", 10)
+	    fileLogger := logger.NewFileWriter(ctx, "{curdir}/{yyyy}/{mm}/logfile_{yyyy}{mm}{dd}.log", 10)
 	    fileLogger.Write([]byte("Log message to file"))
 	}
 
@@ -100,7 +100,7 @@ Broadcast log messages to multiple listeners:
 
 	func main() {
 	    ctx := context.Background()
-	    broadcastLogger := logger.BroadcastWriter(ctx, 10)
+	    broadcastLogger := logger.NewBroadcastWriter(ctx, 10)
 
 	    ch := broadcastLogger.Listen(ctx)
 	    go func() {
@@ -126,7 +126,7 @@ Keep track of the last n lines of log messages:
 
 	func main() {
 	    ctx := context.Background()
-	    tailLogger := logger.TailWriter(ctx, 100, 10)
+	    tailLogger := logger.NewTailWriter(ctx, 100, 10)
 	    tailLogger.Write([]byte("Log message 1\n"))
 	    tailLogger.Write([]byte("Log message 2\n"))
 
@@ -145,7 +145,7 @@ Add prefixes to log messages:
 
 	func main() {
 	    log := logger.New()
-	    prefixLogger := logger.PrefixHandler("PREFIX", log)
+	    prefixLogger := logger.NewPrefixHandler("PREFIX", log)
 	    prefixLogger.Log("This is a prefixed log message.")
 	}
 */

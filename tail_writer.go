@@ -7,8 +7,8 @@ import (
 	"sync"
 )
 
-// tailWriter struct combines the Buffer interface with tailing capabilities.
-type tailWriter struct {
+// TailWriter struct combines the Buffer interface with tailing capabilities.
+type TailWriter struct {
 	Buffer
 	mu    sync.RWMutex
 	max   uint
@@ -16,33 +16,32 @@ type tailWriter struct {
 }
 
 // Tail returns the collected log lines as a single string.
-func (w *tailWriter) Tail() string {
+func (w *TailWriter) Tail() string {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	return strings.Join(w.lines, "\n")
 }
 
 // ondata handles incoming buffer data and stores lines while maintaining a maximum number of lines.
-func (w *tailWriter) ondata(buffer []byte) {
+func (w *TailWriter) ondata(buffer []byte) {
 	reg := regexp.MustCompile(`[\r\n]+`)
 	lines := reg.Split(strings.TrimRight(string(buffer), "\r\n"), -1)
-	excessLines := len(w.lines) + len(lines) - int(w.max)
-	if excessLines > 0 {
-		newlines := make([]string, len(w.lines[excessLines:]))
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	if len_lines, max := len(lines), int(w.max); len_lines > max {
+		w.lines = lines[len_lines-max:]
+	} else if excessLines := len(w.lines) + len_lines - max; excessLines > 0 {
+		newlines := make([]string, max-len_lines)
 		copy(newlines, w.lines[excessLines:])
-		w.mu.Lock()
 		w.lines = append(newlines, lines...)
-		w.mu.Unlock()
 	} else {
-		w.mu.Lock()
 		w.lines = append(w.lines, lines...)
-		w.mu.Unlock()
 	}
 }
 
-// TailWriter initializes and returns a new tailWriter instance with the given parameters.
-func TailWriter(ctx context.Context, max uint, buffer int) *tailWriter {
-	w := &tailWriter{
+// NewTailWriter initializes and returns a new TailWriter instance with the given parameters.
+func NewTailWriter(ctx context.Context, max uint, buffer int) *TailWriter {
+	w := &TailWriter{
 		max: max,
 	}
 	w.Buffer = NewBuffer(ctx, buffer, w.ondata, nil, nil)

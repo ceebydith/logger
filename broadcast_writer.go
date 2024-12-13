@@ -5,15 +5,15 @@ import (
 	"sync"
 )
 
-// broadcastWriter struct combines the Buffer interface with broadcasting capabilities.
-type broadcastWriter struct {
+// BroadcastWriter struct combines the Buffer interface with broadcasting capabilities.
+type BroadcastWriter struct {
 	Buffer
 	mu        sync.RWMutex
 	listeners map[chan []byte]context.Context
 }
 
-// Listen registers a new listener for the broadcastWriter.
-func (w *broadcastWriter) Listen(ctx context.Context, size ...int) <-chan []byte {
+// Listen registers a new listener for the BroadcastWriter.
+func (w *BroadcastWriter) Listen(ctx context.Context, size ...int) <-chan []byte {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 
@@ -31,7 +31,7 @@ func (w *broadcastWriter) Listen(ctx context.Context, size ...int) <-chan []byte
 }
 
 // onstop closes all listener channels when the buffer processing stops.
-func (w *broadcastWriter) onstop() {
+func (w *BroadcastWriter) onstop() {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	for ch := range w.listeners {
@@ -41,12 +41,12 @@ func (w *broadcastWriter) onstop() {
 }
 
 // ondata broadcasts data to all listeners.
-func (w *broadcastWriter) ondata(buffer []byte) {
+func (w *BroadcastWriter) ondata(buffer []byte) {
 	w.delete(w.broadcast(buffer)...)
 }
 
 // broadcast sends the message to all active listeners and collects channels for deletion.
-func (w *broadcastWriter) broadcast(msg []byte) []chan []byte {
+func (w *BroadcastWriter) broadcast(msg []byte) []chan []byte {
 	w.mu.RLock()
 	defer w.mu.RUnlock()
 	var dels []chan []byte
@@ -61,7 +61,7 @@ func (w *broadcastWriter) broadcast(msg []byte) []chan []byte {
 }
 
 // delete removes and closes the specified channels from the listeners map.
-func (w *broadcastWriter) delete(ch ...chan []byte) {
+func (w *BroadcastWriter) delete(ch ...chan []byte) {
 	if len(ch) == 0 {
 		return
 	}
@@ -75,9 +75,9 @@ func (w *broadcastWriter) delete(ch ...chan []byte) {
 	}
 }
 
-// BroadcastWriter initializes and returns a new broadcastWriter instance with the given parameters.
-func BroadcastWriter(ctx context.Context, buffer int) *broadcastWriter {
-	w := &broadcastWriter{
+// NewBroadcastWriter initializes and returns a new BroadcastWriter instance with the given parameters.
+func NewBroadcastWriter(ctx context.Context, buffer int) *BroadcastWriter {
+	w := &BroadcastWriter{
 		listeners: map[chan []byte]context.Context{},
 	}
 	w.Buffer = NewBuffer(ctx, buffer, w.ondata, nil, w.onstop)

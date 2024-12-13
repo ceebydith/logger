@@ -90,7 +90,7 @@ import (
 
 func main() {
     ctx := context.Background()
-    fileLogger := logger.FileWriter(ctx, "{curdir}/{yyyy}/{mm}/logfile_{yyyy}{mm}{dd}.log", 10)
+    fileLogger := logger.NewFileWriter(ctx, "{curdir}/{yyyy}/{mm}/logfile_{yyyy}{mm}{dd}.log", 10)
     fileLogger.Write([]byte("Log message to file"))
 }
 ```
@@ -109,7 +109,7 @@ import (
 
 func main() {
     ctx := context.Background()
-    broadcastLogger := logger.BroadcastWriter(ctx, 10)
+    broadcastLogger := logger.NewBroadcastWriter(ctx, 10)
 
     ch := broadcastLogger.Listen(ctx)
     go func() {
@@ -137,7 +137,7 @@ import (
 
 func main() {
     ctx := context.Background()
-    tailLogger := logger.TailWriter(ctx, 100, 10)
+    tailLogger := logger.NewTailWriter(ctx, 100, 10)
     tailLogger.Write([]byte("Log message 1\n"))
     tailLogger.Write([]byte("Log message 2\n"))
 

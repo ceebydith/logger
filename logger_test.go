@@ -62,7 +62,7 @@ func TestBroadcastWriter(t *testing.T) {
 	var listenerBuffers []*strings.Builder
 
 	ctx, cancel := context.WithCancel(context.TODO())
-	broadcast := logger.BroadcastWriter(ctx, BUFFER_SIZE)
+	broadcast := logger.NewBroadcastWriter(ctx, BUFFER_SIZE)
 
 	for i := 0; i < NUM_LISTENERS; i++ {
 		buffer := new(strings.Builder)
@@ -101,7 +101,7 @@ func TestTailWriter(t *testing.T) {
 	var messages strings.Builder
 
 	ctx, cancel := context.WithCancel(context.TODO())
-	tail := logger.TailWriter(ctx, MAX_LINES, BUFFER_SIZE)
+	tail := logger.NewTailWriter(ctx, MAX_LINES, BUFFER_SIZE)
 
 	for i := 0; i < NUM_MESSAGES; i++ {
 		message := uniqueMessage(fmt.Sprintf("Test message #%d\n", i))
@@ -120,7 +120,7 @@ func TestFileWriter(t *testing.T) {
 	var messages strings.Builder
 	ctx, cancel := context.WithCancel(context.TODO())
 	filename := "target.txt"
-	file := logger.FileWriter(ctx, filename, BUFFER_SIZE)
+	file := logger.NewFileWriter(ctx, filename, BUFFER_SIZE)
 
 	for i := 0; i < NUM_MESSAGES; i++ {
 		message := uniqueMessage(fmt.Sprintf("Test message #%d\n", i))
@@ -163,7 +163,7 @@ func (u *User) DoSomething() {
 
 func TestLoggerType(t *testing.T) {
 	user := User{
-		LogHandler: logger.MustHandler(nil, logger.PrefixHandler("Test", logger.PrefixHandler("User", logger.New()))),
+		LogHandler: logger.NewMustHandler(nil, logger.NewPrefixHandler("Test", logger.NewPrefixHandler("User", logger.New()))),
 	}
 	user.Login()
 	user.Logout()

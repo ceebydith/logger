@@ -8,8 +8,8 @@ import (
 	"github.com/ceebydith/curly"
 )
 
-// fileWriter struct combines the Buffer interface with file writing capabilities.
-type fileWriter struct {
+// FileWriter struct combines the Buffer interface with file writing capabilities.
+type FileWriter struct {
 	Buffer
 	fileformat  string
 	currentfile string
@@ -17,14 +17,14 @@ type fileWriter struct {
 }
 
 // onstop closes the file when the buffer processing stops.
-func (w *fileWriter) onstop() {
+func (w *FileWriter) onstop() {
 	if w.file != nil {
 		w.file.Close()
 	}
 }
 
 // ondata handles data received in the buffer and writes it to the file.
-func (w *fileWriter) ondata(buffer []byte) {
+func (w *FileWriter) ondata(buffer []byte) {
 	if err := w.open(); err != nil {
 		os.Stderr.WriteString("logger.FileWriter error: " + err.Error() + "\n")
 		return
@@ -35,7 +35,7 @@ func (w *fileWriter) ondata(buffer []byte) {
 }
 
 // open opens a new file if the current one has changed, and creates necessary directories.
-func (w *fileWriter) open() error {
+func (w *FileWriter) open() error {
 	currentfile, err := curly.Format(w.fileformat)
 	if err != nil {
 		return err
@@ -60,9 +60,9 @@ func (w *fileWriter) open() error {
 	return nil
 }
 
-// FileWriter initializes and returns a new fileWriter instance with the given parameters.
-func FileWriter(ctx context.Context, fileformat string, buffer int) *fileWriter {
-	w := &fileWriter{
+// NewFileWriter initializes and returns a new FileWriter instance with the given parameters.
+func NewFileWriter(ctx context.Context, fileformat string, buffer int) *FileWriter {
+	w := &FileWriter{
 		fileformat: fileformat,
 	}
 	w.Buffer = NewBuffer(ctx, buffer, w.ondata, nil, w.onstop)
