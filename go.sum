@@ -1,5 +1,5 @@
-github.com/ceebydith/curly v0.2.3 h1:dt2rPuTnxjc8LAzy9ylAls2/tiaAvIaLgLeLBfrE5D8=
-github.com/ceebydith/curly v0.2.3/go.mod h1:d7tt9binKUBO6FhJy3G4uoTdWeFsCgaUAG7e8dYn1mg=
+github.com/ceebydith/curly v0.2.4 h1:tgTeJTiYSsz438PTkGpYDcwSW8zwd7AKlShnrO8S5CQ=
+github.com/ceebydith/curly v0.2.4/go.mod h1:d7tt9binKUBO6FhJy3G4uoTdWeFsCgaUAG7e8dYn1mg=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

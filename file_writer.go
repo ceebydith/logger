@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/ceebydith/curly"
 )
@@ -62,6 +63,7 @@ func (w *FileWriter) open() error {
 
 // NewFileWriter initializes and returns a new FileWriter instance with the given parameters.
 func NewFileWriter(ctx context.Context, fileformat string, buffer int) *FileWriter {
+	fileformat = strings.ReplaceAll(fileformat, "\\{", "\\\\{")
 	w := &FileWriter{
 		fileformat: fileformat,
 	}

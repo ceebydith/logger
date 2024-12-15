@@ -3,7 +3,7 @@ module github.com/ceebydith/logger
 go 1.23.3
 
 require (
-	github.com/ceebydith/curly v0.2.3
+	github.com/ceebydith/curly v0.2.4
 	github.com/stretchr/testify v1.10.0
 )
 
