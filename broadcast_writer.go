@@ -13,7 +13,7 @@ type BroadcastWriter struct {
 }
 
 // Listen registers a new listener for the BroadcastWriter.
-func (w *BroadcastWriter) Listen(ctx context.Context, size ...int) <-chan []byte {
+func (w *BroadcastWriter) Listen(ctx context.Context, size ...uint) <-chan []byte {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 
@@ -21,7 +21,7 @@ func (w *BroadcastWriter) Listen(ctx context.Context, size ...int) <-chan []byte
 		return nil
 	}
 
-	s := 1
+	var s uint = 1
 	if len(size) > 0 {
 		s = size[0]
 	}
@@ -76,7 +76,7 @@ func (w *BroadcastWriter) delete(ch ...chan []byte) {
 }
 
 // NewBroadcastWriter initializes and returns a new BroadcastWriter instance with the given parameters.
-func NewBroadcastWriter(ctx context.Context, buffer int) *BroadcastWriter {
+func NewBroadcastWriter(ctx context.Context, buffer uint) *BroadcastWriter {
 	w := &BroadcastWriter{
 		listeners: map[chan []byte]context.Context{},
 	}

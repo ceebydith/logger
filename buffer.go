@@ -101,7 +101,7 @@ func (b *buffer) run() {
 }
 
 // NewBuffer initializes and returns a new buffer instance with the given parameters.
-func NewBuffer(ctx context.Context, size int, ondata func(buffer []byte), onstart, onstop func()) Buffer {
+func NewBuffer(ctx context.Context, size uint, ondata func(buffer []byte), onstart, onstop func()) Buffer {
 	buf := &buffer{
 		ctx:     ctx,
 		ch:      make(chan struct{}, 1),

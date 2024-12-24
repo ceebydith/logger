@@ -40,7 +40,7 @@ func (w *TailWriter) ondata(buffer []byte) {
 }
 
 // NewTailWriter initializes and returns a new TailWriter instance with the given parameters.
-func NewTailWriter(ctx context.Context, max uint, buffer int) *TailWriter {
+func NewTailWriter(ctx context.Context, max uint, buffer uint) *TailWriter {
 	w := &TailWriter{
 		max: max,
 	}
