@@ -97,6 +97,12 @@ func (l *Default) LogfDefer(err *error, format string, v ...any) func() {
 	return l.Defer(err, fmt.Sprintf(format, v...))
 }
 
+// Write implements io.Writer interface.
+func (l *Default) Write(p []byte) (n int, err error) {
+	l.print(string(p))
+	return len(p), nil
+}
+
 // Writer returns the output destination for the logger.
 func (l *Default) Writer() io.Writer {
 	return l.logger.Writer()
