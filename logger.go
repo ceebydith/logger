@@ -97,6 +97,11 @@ func (l *Default) LogfDefer(err *error, format string, v ...any) func() {
 	return l.Defer(err, fmt.Sprintf(format, v...))
 }
 
+// Writer returns the output destination for the logger.
+func (l *Default) Writer() io.Writer {
+	return l.logger.Writer()
+}
+
 // New returns a new instance of Default.
 func New(w ...io.Writer) *Default {
 	if len(w) == 0 {
